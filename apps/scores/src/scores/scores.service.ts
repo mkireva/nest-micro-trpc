@@ -14,8 +14,25 @@ export class ScoresService {
     return this.scores;
   }
 
+  deleteScoreById(id: string) {
+    const index = this.scores.findIndex((score) => score.id === id);
+    if (index !== -1) {
+      this.scores.splice(index, 1);
+      return true;
+    }
+    return false;
+  }
   getScoreById(id: string) {
     return this.scores.find((score) => score.id === id);
+  }
+
+  updateScoreById(id: string, updatedScore: Score) {
+    const index = this.scores.findIndex((score) => score.id === id);
+    if (index !== -1) {
+      this.scores[index] = { ...this.scores[index], ...updatedScore };
+      return this.scores[index];
+    }
+    return null;
   }
 
   async createScore(request: CreateScoreRequest) {

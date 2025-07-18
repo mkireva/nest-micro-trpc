@@ -16,9 +16,13 @@
   "pnpm": {
     "overrides": {
       "typescript": "5.8.2"
-    }
+    },
+    "onlyBuiltDependencies": [
+      "@nestjs/core",
+      "@swc/core"
+    ]
   },
-  "packageManager": "pnpm@9.0.0",
+  "packageManager": "pnpm@10.12.4",
   "engines": {
     "node": ">=18"
   }

@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ClientsModule } from './scores/clients/clients.module';
 import { ScoresModule } from './scores/scores.module';
+import { DatabaseModule } from './database/database.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -10,6 +12,8 @@ import { ScoresModule } from './scores/scores.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    DatabaseModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],

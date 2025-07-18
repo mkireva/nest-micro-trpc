@@ -4,42 +4,43 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Put,
 } from '@nestjs/common';
-import { CreateScoreRequest } from './dto/create-score-reuqest';
 import { ScoresService } from './scores.service';
+import * as schema from './schema';
 
 @Controller('scores')
 export class ScoresController {
-  constructor(private readonly scoresService: ScoresService) {}
+  constructor(private readonly scoresService: ScoresService) { }
 
   @Get()
-  getAllScores() {
-    return this.scoresService.getAllScores();
+  getScores() {
+    return this.scoresService.getScores();
   }
 
   @Get(':id')
-  getScoreById(@Param('id') id: string) {
-    return this.scoresService.getScoreById(id);
-  }
-
-  @Delete(':id')
-  deleteScoreById(@Param('id') id: string) {
-    return this.scoresService.deleteScoreById(id);
+  async getScoreById(@Param('id') id: number) {
+    return this.scoresService.getScore(id);
   }
 
   @Post()
-  async createScore(@Body() request: CreateScoreRequest) {
+  async createScore(@Body() request: typeof schema.scores.$inferInsert) {
     return this.scoresService.createScore(request);
   }
 
-  @Put(':id')
-  updateScoreById(
-    @Param('id') id: string,
-    @Body() updatedScore: CreateScoreRequest,
+  @Patch(':id')
+  async updateScore(
+    @Param('id') scoreId: string,
+    @Body() request: Partial<typeof schema.scores.$inferInsert>,
   ) {
-    const score = { ...updatedScore, id };
-    return this.scoresService.updateScoreById(id, score);
+    return this.scoresService.updatePost(parseInt(scoreId), request);
   }
+
+  @Delete(':id')
+  deleteScoreById(@Param('id') id: number) {
+    return this.scoresService.deleteScore(id);
+  }
+
 }

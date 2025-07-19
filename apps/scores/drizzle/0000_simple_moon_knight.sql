@@ -3,6 +3,7 @@ CREATE TABLE "scores" (
 	"title" text,
 	"composer" text,
 	"lyricist" text,
+	"location" text,
 	"description" text,
 	"genre" text,
 	"category" text,
@@ -12,7 +13,7 @@ CREATE TABLE "scores" (
 	"create_date" date,
 	"creation_date" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now(),
-	"price" integer,
+	"price" numeric(10, 2),
 	"payment_id" text,
 	"user_id" integer
 );

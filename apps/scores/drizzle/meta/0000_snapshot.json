@@ -1,5 +1,5 @@
 {
-  "id": "9e625a5f-55a1-4f7f-a066-23dac37e4648",
+  "id": "c3524141-9110-4a12-b651-c691d112cb56",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -28,6 +28,12 @@
         },
         "lyricist": {
           "name": "lyricist",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "location": {
+          "name": "location",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -90,7 +96,7 @@
         },
         "price": {
           "name": "price",
-          "type": "integer",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": false
         },

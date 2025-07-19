@@ -4,6 +4,7 @@ import { ClientsModule } from './scores/clients/clients.module';
 import { ScoresModule } from './scores/scores.module';
 import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './users/users.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { UsersModule } from './users/users.module';
     }),
     DatabaseModule,
     UsersModule,
+    UploadModule,
   ],
   controllers: [],
   providers: [],

@@ -8,6 +8,7 @@ import {
   text,
   timestamp,
 } from 'drizzle-orm/pg-core';
+import { uploads } from 'src/upload/schema';
 import { users } from 'src/users/schema';
 
 export const scores = pgTable('scores', {
@@ -27,12 +28,13 @@ export const scores = pgTable('scores', {
   updatedAt: timestamp('updated_at').defaultNow(),
   price: numeric('price', { precision: 10, scale: 2 }),
   paymentId: text('payment_id'),
-  userId: integer('user_id').references(() => users.id),
+  userId: integer('user_id').references(() => users.id)
 });
 
-export const scoresRelations = relations(scores, ({ one }) => ({
+export const scoresRelations = relations(scores, ({ one, many }) => ({
   user: one(users, {
     fields: [scores.userId],
     references: [users.id],
   }),
+  uploads: many(uploads)
 }));

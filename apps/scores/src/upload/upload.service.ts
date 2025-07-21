@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { PutObjectCommand, DeleteObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
 import { DATABASE_CONNECTION } from '../database/database-connection';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
@@ -118,6 +118,32 @@ export class UploadService {
   }
 
   async deleteUpload(id: number) {
+    // First, get the upload record to get the S3 key
+    const [upload] = await this.database
+      .select()
+      .from(schema.uploads)
+      .where(eq(schema.uploads.id, id));
+
+    if (!upload) {
+      throw new Error(`Upload with id ${id} not found`);
+    }
+
+    // Delete the file from S3
+    try {
+      await this.s3Client.send(
+        new DeleteObjectCommand({
+          Bucket: upload.s3Bucket,
+          Key: upload.s3Key,
+        }),
+      );
+      console.log(`Successfully deleted file from S3: ${upload.s3Key}`);
+    } catch (error) {
+      console.error('Failed to delete file from S3:', error);
+      // Continue with database deletion even if S3 deletion fails
+      // This prevents orphaned database records
+    }
+
+    // Delete the metadata from database
     const [deletedUpload] = await this.database
       .delete(schema.uploads)
       .where(eq(schema.uploads.id, id))

@@ -7,6 +7,7 @@ import {
   Get,
   Param,
   Body,
+  Delete,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadService } from './upload.service';
@@ -70,5 +71,10 @@ export class UploadController {
     @Param('scoreId') scoreId: number,
   ) {
     return await this.uploadService.getUploadsByScore(scoreId);
+  }
+
+  @Delete(':id')
+  deleteUploadById(@Param('id') id: string) {
+    return this.uploadService.deleteUpload(parseInt(id));
   }
 }

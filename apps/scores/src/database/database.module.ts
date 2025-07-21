@@ -4,6 +4,7 @@ import { DATABASE_CONNECTION } from './database-connection';
 import { ConfigService } from '@nestjs/config';
 import * as userSchema from '../users/schema';
 import * as scoreSchema from '../scores/schema';
+import * as uploadSchema from '../upload/schema';
 import { Pool } from 'pg';
 
 @Module({
@@ -18,6 +19,7 @@ import { Pool } from 'pg';
           schema: {
             ...userSchema,
             ...scoreSchema,
+            ...uploadSchema,
           },
         });
       },
@@ -26,4 +28,4 @@ import { Pool } from 'pg';
   ],
   exports: [DATABASE_CONNECTION],
 })
-export class DatabaseModule {}
+export class DatabaseModule { }

@@ -22,13 +22,16 @@ export const scores = pgTable('scores', {
   category: text('category'),
   key: text('key'),
   color: text('color'),
-  lyrics: text('lyrics'),
+  lyricsBG: text('lyrics_bg'),
+  lyricsDE: text('lyrics_de'),
+  lyricsEN: text('lyrics_en'),
+  lyricsFR: text('lyrics_fr'),
   createDate: date('create_date'),
   timestamp: timestamp('creation_date').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
   price: numeric('price', { precision: 10, scale: 2 }),
   paymentId: text('payment_id'),
-  userId: integer('user_id').references(() => users.id)
+  userId: integer('user_id').references(() => users.id),
 });
 
 export const scoresRelations = relations(scores, ({ one, many }) => ({
@@ -36,5 +39,5 @@ export const scoresRelations = relations(scores, ({ one, many }) => ({
     fields: [scores.userId],
     references: [users.id],
   }),
-  uploads: many(uploads)
+  uploads: many(uploads),
 }));

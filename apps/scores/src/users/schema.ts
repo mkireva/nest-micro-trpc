@@ -1,6 +1,6 @@
-import { relations } from "drizzle-orm";
-import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
-import { scores } from "src/scores/schema";
+import { relations } from 'drizzle-orm';
+import { integer, pgTable, serial, text } from 'drizzle-orm/pg-core';
+import { scores } from 'src/scores/schema';
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
@@ -10,9 +10,8 @@ export const users = pgTable('users', {
 
 export const usersRelations = relations(users, ({ many, one }) => ({
   scores: many(scores),
-  profile: one(profile)
+  profile: one(profile),
 }));
-
 
 export const profile = pgTable('profile', {
   id: serial('id').primaryKey(),
@@ -24,4 +23,3 @@ export const profile = pgTable('profile', {
 export const profileRelations = relations(profile, ({ one }) => ({
   user: one(users, { fields: [profile.userId], references: [users.id] }),
 }));
-

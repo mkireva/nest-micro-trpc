@@ -8,12 +8,10 @@ export class UsersService {
   constructor(
     @Inject(DATABASE_CONNECTION)
     private readonly database: NodePgDatabase<typeof schema>,
-  ) { }
+  ) {}
 
   async getUsers() {
-    return this.database.query.users.findMany(
-      { with: { scores: true } }
-    );
+    return this.database.query.users.findMany({ with: { scores: true } });
   }
 
   async createUser(user: typeof schema.users.$inferInsert) {

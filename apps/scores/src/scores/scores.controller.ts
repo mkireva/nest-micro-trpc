@@ -6,7 +6,6 @@ import {
   Param,
   Patch,
   Post,
-  Put,
 } from '@nestjs/common';
 import { ScoresService } from './scores.service';
 import * as schema from './schema';
@@ -20,9 +19,19 @@ export class ScoresController {
     return this.scoresService.getScores();
   }
 
+  @Get('without-uploads')
+  getScoresWithoutUploads() {
+    return this.scoresService.getScoresWithoutUploads();
+  }
+
   @Get(':id')
-  async getScoreById(@Param('id') id: number) {
-    return this.scoresService.getScore(id);
+  async getScoreById(@Param('id') id: string) {
+    return this.scoresService.getScore(parseInt(id));
+  }
+
+  @Get(':id/with-uploads')
+  async getScoreWithUploads(@Param('id') id: string) {
+    return this.scoresService.getScoreWithUploads(parseInt(id));
   }
 
   @Post()
@@ -39,8 +48,7 @@ export class ScoresController {
   }
 
   @Delete(':id')
-  deleteScoreById(@Param('id') id: number) {
-    return this.scoresService.deleteScore(id);
+  deleteScoreById(@Param('id') id: string) {
+    return this.scoresService.deleteScore(parseInt(id));
   }
-
 }

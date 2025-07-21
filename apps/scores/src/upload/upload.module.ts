@@ -3,9 +3,11 @@ import { UploadController } from './upload.controller';
 import { UploadService } from './upload.service';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { ConfigService } from '@nestjs/config';
+import { DatabaseModule } from '../database/database.module';
 
 @Module({
   imports: [
+    DatabaseModule,
     ThrottlerModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({
         throttlers: [
@@ -19,6 +21,6 @@ import { ConfigService } from '@nestjs/config';
     }),
   ],
   controllers: [UploadController],
-  providers: [UploadService]
+  providers: [UploadService],
 })
-export class UploadModule { }
+export class UploadModule {}

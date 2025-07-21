@@ -4,9 +4,16 @@ import { CLIENTS } from './clients/clients.constants';
 import { Clients } from './clients/clients.interface';
 import { DATABASE_CONNECTION } from '../database/database-connection';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import * as schema from './schema';
-import { eq } from 'drizzle-orm';
+import * as scoreSchema from './schema';
+import * as uploadSchema from '../upload/schema';
+import * as userSchema from '../users/schema';
 
+const schema = {
+  ...scoreSchema,
+  ...uploadSchema,
+  ...userSchema,
+};
+import { eq } from 'drizzle-orm';
 
 @Injectable()
 export class ScoresService {
@@ -14,21 +21,39 @@ export class ScoresService {
     @Inject(CLIENTS) private readonly clients: Clients,
     @Inject(DATABASE_CONNECTION)
     private readonly database: NodePgDatabase<typeof schema>,
-  ) { }
+  ) {}
 
   private readonly scores: Score[] = [];
 
   async getScores() {
-    return this.database.query.scores.findMany(
-      { with: { user: true }, },
-    );
+    return this.database.query.scores.findMany({
+      with: {
+        user: true,
+        uploads: true,
+      },
+    });
   }
-
 
   getScore(scoreId: number) {
     return this.database.query.scores.findFirst({
-      where: eq(schema.scores.id, scoreId)
-    })
+      where: eq(schema.scores.id, scoreId),
+    });
+  }
+
+  getScoreWithUploads(scoreId: number) {
+    return this.database.query.scores.findFirst({
+      where: eq(schema.scores.id, scoreId),
+      with: {
+        uploads: true,
+        user: true,
+      },
+    });
+  }
+
+  async getScoresWithoutUploads() {
+    return this.database.query.scores.findMany({
+      with: { user: true },
+    });
   }
 
   private formatDateForDb(date: any): string | null {
@@ -41,11 +66,10 @@ export class ScoresService {
   async createScore(request: typeof schema.scores.$inferInsert) {
     // Only fetch payment if paymentId is provided
     if (request.paymentId) {
-      const payment = await this.clients.paymentsClient.payments.getPayment.query(
-        {
+      const payment =
+        await this.clients.paymentsClient.payments.getPayment.query({
           id: request.paymentId,
-        },
-      );
+        });
       // Use the payment somehow
       console.log(payment);
     }
@@ -66,16 +90,14 @@ export class ScoresService {
       .set(score)
       .where(eq(schema.scores.id, scoreId))
       .returning();
-    return result
+    return result;
   }
-
 
   async deleteScore(scoreId: number) {
     const result = await this.database
       .delete(schema.scores)
       .where(eq(schema.scores.id, scoreId))
       .returning();
-      
 
     return result.length > 0;
   }

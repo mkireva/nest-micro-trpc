@@ -7,7 +7,10 @@ export class CreateScoreRequest {
   category: string;
   key: string;
   color: string;
-  lyrics: string;
+  lyricsBG: string;
+  lyricsDe: string;
+  lyricsEN: string;
+  lyricsFR: string
   createDate: Date;
   price: number;
   paymentId: string;

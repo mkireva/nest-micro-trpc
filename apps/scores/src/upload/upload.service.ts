@@ -4,6 +4,8 @@ import { ConfigService } from '@nestjs/config';
 import { DATABASE_CONNECTION } from '../database/database-connection';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { eq } from 'drizzle-orm';
+import { randomBytes } from 'crypto';
+import { extname } from 'path';
 import * as uploadSchema from './schema';
 import * as scoreSchema from '../scores/schema';
 import * as userSchema from '../users/schema';
@@ -30,8 +32,16 @@ export class UploadService {
     this.bucketName = this.configService.get('AWS_S3_BUCKET', 'scores-upload');
   }
 
+  private generateUniqueFileName(originalFileName: string): string {
+    // Generate 16 random bytes (32 hex characters) + timestamp + original extension
+    const randomId = randomBytes(16).toString('hex');
+    const timestamp = Date.now();
+    const extension = extname(originalFileName);
+    return `${randomId}_${timestamp}${extension}`;
+  }
+
   async upload(
-    fileName: string,
+    originalFileName: string,
     interpretName: string,
     arrangementName: string,
     albumName: string,
@@ -41,7 +51,9 @@ export class UploadService {
     uploadedBy?: number,
     scoreId?: number,
   ) {
-    const s3Key = `${Date.now()}-${fileName}`;
+    // Generate unique, unguessable filename
+    const uniqueFileName = this.generateUniqueFileName(originalFileName);
+    const s3Key = uniqueFileName;
     const s3Url = `https://${this.bucketName}.s3.${this.configService.getOrThrow('AWS_S3_REGION')}.amazonaws.com/${s3Key}`;
 
     // Upload to S3
@@ -58,7 +70,8 @@ export class UploadService {
     const [uploadRecord] = await this.database
       .insert(schema.uploads)
       .values({
-        fileName,
+        fileName: uniqueFileName, // Store the unique filename
+        originalFileName, // Store the original filename for display
         interpretName,
         arrangementName,
         albumName,

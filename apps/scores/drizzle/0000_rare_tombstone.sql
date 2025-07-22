@@ -24,8 +24,10 @@ CREATE TABLE "scores" (
 CREATE TABLE "uploads" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"file_name" varchar(255) NOT NULL,
+	"original_file_name" varchar(255) NOT NULL,
 	"interpret_name" varchar(255) NOT NULL,
 	"arrangement_name" varchar(255) NOT NULL,
+	"album_name" varchar(255) NOT NULL,
 	"mime_type" varchar(100) NOT NULL,
 	"category" text,
 	"file_size" integer NOT NULL,
@@ -36,6 +38,7 @@ CREATE TABLE "uploads" (
 	"score_id" integer,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "uploads_file_name_unique" UNIQUE("file_name"),
 	CONSTRAINT "uploads_s3_key_unique" UNIQUE("s3_key")
 );
 --> statement-breakpoint

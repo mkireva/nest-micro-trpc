@@ -1,1 +1,0 @@
-ALTER TABLE "uploads" ADD COLUMN "album_name" varchar(255) NOT NULL;

@@ -12,7 +12,8 @@ import { scores } from '../scores/schema';
 
 export const uploads = pgTable('uploads', {
   id: serial('id').primaryKey(),
-  fileName: varchar('file_name', { length: 255 }).notNull(),
+  fileName: varchar('file_name', { length: 255 }).notNull().unique(), // Unique, unguessable filename
+  originalFileName: varchar('original_file_name', { length: 255 }).notNull(), // Original filename for display
   interpretName: varchar('interpret_name', { length: 255 }).notNull(),
   arrangementName: varchar('arrangement_name', { length: 255 }).notNull(),
   albumName: varchar('album_name', { length: 255 }).notNull(),

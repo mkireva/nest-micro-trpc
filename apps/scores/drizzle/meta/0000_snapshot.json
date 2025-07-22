@@ -1,5 +1,5 @@
 {
-  "id": "9e09eb04-cbfd-471e-8ac6-88250b8047e7",
+  "id": "10f7e9d8-d2ab-4657-bea7-776709b92a40",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -169,6 +169,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "original_file_name": {
+          "name": "original_file_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
         "interpret_name": {
           "name": "interpret_name",
           "type": "varchar(255)",
@@ -177,6 +183,12 @@
         },
         "arrangement_name": {
           "name": "arrangement_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "album_name": {
+          "name": "album_name",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
@@ -275,6 +287,13 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
+        "uploads_file_name_unique": {
+          "name": "uploads_file_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "file_name"
+          ]
+        },
         "uploads_s3_key_unique": {
           "name": "uploads_s3_key_unique",
           "nullsNotDistinct": false,

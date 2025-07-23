@@ -1,4 +1,5 @@
 import { relations } from 'drizzle-orm';
+import { index } from 'drizzle-orm/pg-core';
 import {
   date,
   integer,
@@ -32,7 +33,9 @@ export const scores = pgTable('scores', {
   price: numeric('price', { precision: 10, scale: 2 }),
   paymentId: text('payment_id'),
   userId: integer('user_id').references(() => users.id),
-});
+},
+  (table) => [index('test').on(table.title)]
+);
 
 export const scoresRelations = relations(scores, ({ one, many }) => ({
   user: one(users, {
